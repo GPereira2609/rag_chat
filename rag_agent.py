@@ -32,7 +32,6 @@ def database_init(connection: str) -> None:
     connection.commit()
 
 def create_rag_chain(pdf_files: list[str]) -> RetrievalQA:
-    
     CONNECTION_STRING = f"postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
     COLLECTION_NAME = "documentos_projeto"
     
