@@ -32,10 +32,9 @@ def create_rag_chain(pdf_files: list[str]) -> RetrievalQA:
     
     embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
 
-    # Conectamos ao banco e garantimos que a tabela de rastreamento exista
     import psycopg
     connection = psycopg.connect(CONNECTION_STRING)
-    database_init(connection) # <--- NOVO: Garante que a tabela de controle existe
+    database_init(connection) 
 
     vectorstore = PGVector(
         connection=CONNECTION_STRING,
@@ -43,8 +42,6 @@ def create_rag_chain(pdf_files: list[str]) -> RetrievalQA:
         embeddings=embeddings,
     )
 
-    # --- LÓGICA DE VERIFICAÇÃO DE ARQUIVOS ---
-    # 1. Busca os nomes de arquivos já processados no banco de dados
     processed_filenames = set()
     with connection.cursor() as cur:
         cur.execute("SELECT filename FROM processed_files;")
@@ -52,7 +49,6 @@ def create_rag_chain(pdf_files: list[str]) -> RetrievalQA:
             processed_filenames.add(record[0])
     print(f"INFO: Encontrados {len(processed_filenames)} arquivos já processados no banco de dados.")
 
-    # 2. Compara com os arquivos de entrada para ver o que é novo
     files_to_process = []
     for f_path in pdf_files:
         filename = os.path.basename(f_path)
@@ -60,9 +56,7 @@ def create_rag_chain(pdf_files: list[str]) -> RetrievalQA:
             files_to_process.append(f_path)
         else:
             print(f"INFO: Arquivo '{filename}' já processado. Pulando.")
-    # ---------------------------------------------
 
-    # Apenas executa o processo caro de RAG se houver arquivos novos
     if files_to_process:
         print(f"INFO: Processando {len(files_to_process)} novos arquivos...")
         all_documents = []
@@ -78,19 +72,15 @@ def create_rag_chain(pdf_files: list[str]) -> RetrievalQA:
             text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
             splits = text_splitter.split_documents(all_documents)
             
-            # Adiciona os novos documentos ao vector store
             vectorstore.add_documents(splits)
             print("INFO: Novos documentos adicionados ao Vector Store com sucesso.")
 
-            # --- REGISTRO PÓS-SUCESSO ---
-            # 3. Registra os novos arquivos na tabela de controle
             with connection.cursor() as cur:
                 for f_path in files_to_process:
                     filename = os.path.basename(f_path)
                     cur.execute("INSERT INTO processed_files (filename) VALUES (%s) ON CONFLICT (filename) DO NOTHING;", (filename,))
             connection.commit()
             print("INFO: Nomes dos novos arquivos registrados na tabela de controle.")
-            # -----------------------------
     else:
         print("INFO: Nenhum arquivo novo para processar. O agente está pronto para consulta.")
 
