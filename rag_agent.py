@@ -1,5 +1,5 @@
-import tempfile
 import os  
+import psycopg
 
 from langchain_google_genai import (
     ChatGoogleGenerativeAI,
@@ -10,6 +10,13 @@ from langchain_community.document_loaders import PyPDFLoader
 from langchain.chains import RetrievalQA
 from dotenv import load_dotenv
 from langchain_postgres.vectorstores import PGVector
+from config import (
+    DB_USER,
+    DB_PASSWORD,
+    DB_HOST,
+    DB_PORT,
+    DB_NAME,
+)
 
 def database_init(connection: str) -> None:
     with connection.cursor() as conn:
@@ -25,14 +32,11 @@ def database_init(connection: str) -> None:
     connection.commit()
 
 def create_rag_chain(pdf_files: list[str]) -> RetrievalQA:
-    load_dotenv()
-    
-    CONNECTION_STRING = "postgresql://postgres:password@localhost:5432/ia_educacao_db"
+    CONNECTION_STRING = f"postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
     COLLECTION_NAME = "documentos_projeto"
     
     embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
 
-    import psycopg
     connection = psycopg.connect(CONNECTION_STRING)
     database_init(connection) 
 
