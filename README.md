@@ -96,7 +96,7 @@ A percepção é que o modelo ajuda em questões pontuais da matéria, mas que p
 
 # 9. Referências
 
-- OLIVEIRA, Enrique Santos de. *PLUTO: um sistema de chatbot que utiliza IA e a abordagem RAG para responder dúvidas sobre o SIGAA* : TCC (Ciência da Computação) – Universidade Federal de Alagoas, Campus Arapiraca, Arapiraca, 2025. 73 f. Trabalho de Conclusão de Curso. Defesa em 14 de maio de 2025. Disponível em: Repositório Digital da UFAL (Campus Arapiraca). Acesso em: [coloque a data em que você acessou, ex.: 6 set. 2025].  
+- OLIVEIRA, Enrique Santos de. *PLUTO: um sistema de chatbot que utiliza IA e a abordagem RAG para responder dúvidas sobre o SIGAA* : TCC (Ciência da Computação) – Universidade Federal de Alagoas, Campus Arapiraca, Arapiraca, 2025. 73 f. Trabalho de Conclusão de Curso. Defesa em 14 de maio de 2025. Disponível em: Repositório Digital da UFAL (Campus Arapiraca). Acesso em: 6 set. 2025.  
 
 - J, Nithin Joel; REDDY S, Jewel. *Employee Data Insights: Building a Chat-Based Analysis App with Streamlit and Gemini Pro with Speech Recognition* (March 30, 2025). SSRN. Disponível em: <https://ssrn.com/abstract=5200598> ou <http://dx.doi.org/10.2139/ssrn.5200598>.  
 
